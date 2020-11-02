@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - controller.yaml
+
+images:
+  - name: controller
+    newName: eu.gcr.io/cloud-native-coding/cnde-controller
+    newTag: latest
+
+configMapGenerator:
+  - name: cnde-controller-config
+    env: cnde-controller.properties
+
+## this secret is used for mTLS communication to the c-n-d-e Dashboard
+## the respective sections in controller.yaml have to be enabled as well
+# secretGenerator:
+#   - name: api-client-cert
+#     files:
+#       - ./api-client-cert/client.pem
+#       - ./api-client-cert/client.key
+
+generatorOptions:
+  disableNameSuffixHash: true
